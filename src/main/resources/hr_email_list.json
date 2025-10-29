@@ -1,0 +1,102 @@
+[
+  {
+    "name": "Priya Sharma",
+    "email": "priya.sharma@tcs.com",
+    "companyName": "TCS"
+  },
+  {
+    "name": "Amit Verma",
+    "email": "amit.verma@infosys.com",
+    "companyName": "Infosys"
+  },
+  {
+    "name": "Sneha Kapoor",
+    "email": "sneha.kapoor@wipro.com",
+    "companyName": "Wipro"
+  },
+  {
+    "name": "Rohit Agarwal",
+    "email": "rohit.agarwal@accenture.com",
+    "companyName": "Accenture"
+  },
+  {
+    "name": "Anjali Nair",
+    "email": "anjali.nair@capgemini.com",
+    "companyName": "Capgemini"
+  },
+  {
+    "name": "Karan Gupta",
+    "email": "karan.gupta@deloitte.com",
+    "companyName": "Deloitte"
+  },
+  {
+    "name": "Mitali Joshi",
+    "email": "mitali.joshi@pwc.com",
+    "companyName": "PwC"
+  },
+  {
+    "name": "Rajesh Patel",
+    "email": "rajesh.patel@kpmg.com",
+    "companyName": "KPMG"
+  },
+  {
+    "name": "Neha Mehta",
+    "email": "neha.mehta@hcl.com",
+    "companyName": "HCL Technologies"
+  },
+  {
+    "name": "Siddharth Singh",
+    "email": "siddharth.singh@techmahindra.com",
+    "companyName": "Tech Mahindra"
+  },
+  {
+    "name": "Divya Sharma",
+    "email": "divya.sharma@ltimindtree.com",
+    "companyName": "LTI Mindtree"
+  },
+  {
+    "name": "Arjun Das",
+    "email": "arjun.das@cognizant.com",
+    "companyName": "Cognizant"
+  },
+  {
+    "name": "Ritika Jain",
+    "email": "ritika.jain@genpact.com",
+    "companyName": "Genpact"
+  },
+  {
+    "name": "Varun Khanna",
+    "email": "varun.khanna@oracle.com",
+    "companyName": "Oracle"
+  },
+  {
+    "name": "Kavya Iyer",
+    "email": "kavya.iyer@zoho.com",
+    "companyName": "Zoho"
+  },
+  {
+    "name": "",
+    "email": "hr@startuplabs.io",
+    "companyName": "Startup Labs"
+  },
+  {
+    "name": "",
+    "email": "careers@finedge.com",
+    "companyName": "FinEdge"
+  },
+  {
+    "name": "",
+    "email": "jobs@codestack.in",
+    "companyName": "CodeStack"
+  },
+  {
+    "name": "",
+    "email": "talent@brighttech.ai",
+    "companyName": "BrightTech AI"
+  },
+  {
+    "name": "",
+    "email": "hrdesk@quantumlabs.com",
+    "companyName": "Quantum Labs"
+  }
+]

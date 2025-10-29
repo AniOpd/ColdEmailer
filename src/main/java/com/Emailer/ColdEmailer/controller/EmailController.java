@@ -1,0 +1,87 @@
+package com.Emailer.ColdEmailer.controller;
+
+import com.Emailer.ColdEmailer.entity.Candidate;
+import com.Emailer.ColdEmailer.service.EmailService;
+import com.opencsv.CSVReader;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/email")
+public class EmailController {
+
+    @Autowired
+    private EmailService emailService;
+
+    /**
+     * ✅ Send cold emails via JSON request body.
+     * Endpoint: POST /api/email/send
+     */
+    @PostMapping("/send")
+    public ResponseEntity<?> sendEmails(@RequestBody List<Candidate> candidates) {
+        if (candidates == null || candidates.isEmpty()) {
+            return ResponseEntity.badRequest().body("❌ Candidate list cannot be empty.");
+        }
+
+        try {
+            emailService.sendColdEmails(candidates);
+            return ResponseEntity.ok("✅ Emails sent successfully via JSON input!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError()
+                    .body("❌ Failed to send one or more emails: " + e.getMessage());
+        }
+    }
+
+    /**
+     * ✅ Send cold emails by uploading CSV file.
+     * CSV Format: name,email,companyName
+     * Endpoint: POST /api/email/send/csv
+     */
+    @PostMapping("/send/csv")
+    public ResponseEntity<?> sendEmailsFromCsv(@RequestParam("file") MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            return ResponseEntity.badRequest().body("❌ Please upload a valid CSV file.");
+        }
+
+        List<Candidate> candidates = new ArrayList<>();
+
+        try (CSVReader reader = new CSVReader(new InputStreamReader(file.getInputStream()))) {
+            String[] line;
+            boolean isHeader = true;
+            while ((line = reader.readNext()) != null) {
+                if (isHeader) { // Skip header
+                    isHeader = false;
+                    continue;
+                }
+                if (line.length >= 3) {
+                    String name = line[0].trim();
+                    String email = line[1].trim();
+                    String company = line[2].trim();
+
+                    // Validate basic email format
+                    if (email != null && email.contains("@")) {
+                        candidates.add(new Candidate(name, email, company));
+                    }
+                }
+            }
+
+            if (candidates.isEmpty()) {
+                return ResponseEntity.badRequest().body("❌ No valid candidate entries found in CSV.");
+            }
+
+            emailService.sendColdEmails(candidates);
+            return ResponseEntity.ok("✅ Emails sent successfully via CSV upload! Count: " + candidates.size());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError()
+                    .body("❌ Failed to process CSV file: " + e.getMessage());
+        }
+    }
+}
