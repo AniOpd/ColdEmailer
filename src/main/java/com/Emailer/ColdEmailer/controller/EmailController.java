@@ -1,7 +1,7 @@
 package com.Emailer.ColdEmailer.controller;
 
 import com.Emailer.ColdEmailer.entity.Candidate;
-import com.Emailer.ColdEmailer.service.EmailService;
+import com.Emailer.ColdEmailer.service.EmailServiceImpl;
 import com.opencsv.CSVReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,13 +11,14 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/email")
 public class EmailController {
 
     @Autowired
-    private EmailService emailService;
+    private EmailServiceImpl emailService;
 
     /**
      * ✅ Send cold emails via JSON request body.
@@ -29,13 +30,12 @@ public class EmailController {
             return ResponseEntity.badRequest().body("❌ Candidate list cannot be empty.");
         }
 
-        try {
-            emailService.sendColdEmails(candidates);
-            return ResponseEntity.ok("✅ Emails sent successfully via JSON input!");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.internalServerError()
-                    .body("❌ Failed to send one or more emails: " + e.getMessage());
+        Map<String, Object> result = emailService.sendColdEmails(candidates);
+
+        if ((int) result.get("failureCount") > 0) {
+            return ResponseEntity.internalServerError().body(result);
+        } else {
+            return ResponseEntity.ok(result);
         }
     }
 
@@ -56,7 +56,7 @@ public class EmailController {
             String[] line;
             boolean isHeader = true;
             while ((line = reader.readNext()) != null) {
-                if (isHeader) { // Skip header
+                if (isHeader) {
                     isHeader = false;
                     continue;
                 }
@@ -65,7 +65,6 @@ public class EmailController {
                     String email = line[1].trim();
                     String company = line[2].trim();
 
-                    // Validate basic email format
                     if (email != null && email.contains("@")) {
                         candidates.add(new Candidate(name, email, company));
                     }
@@ -76,8 +75,14 @@ public class EmailController {
                 return ResponseEntity.badRequest().body("❌ No valid candidate entries found in CSV.");
             }
 
-            emailService.sendColdEmails(candidates);
-            return ResponseEntity.ok("✅ Emails sent successfully via CSV upload! Count: " + candidates.size());
+            Map<String, Object> result = emailService.sendColdEmails(candidates);
+
+            if ((int) result.get("failureCount") > 0) {
+                return ResponseEntity.internalServerError().body(result);
+            } else {
+                return ResponseEntity.ok(result);
+
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.internalServerError()
